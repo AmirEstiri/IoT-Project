@@ -1,8 +1,8 @@
 # IoT_Project
 
 ## Project Setup
-Download node for your desired OS.
-Download My-Sql Server for the desired OS.
+Download node for your desired OS.\\
+Download My-Sql Server for the desired OS.\\
 Setup a My-Sql database on your localhost machine.
 Clone the repository, cd into the folder and install the necessary packages with the command below:
 `npm install package_name`
