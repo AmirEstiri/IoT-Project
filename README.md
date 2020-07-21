@@ -13,7 +13,7 @@ If you encounter any error in this step, run the following queries in your My-Sq
 `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'`\
 `flush privileges`\
 Run `create_table.js` like before to create the necessary tables for events, backlogs and users.\
-Run `add_users.js` and `add_events.js` to add some sample data to the existing tables.\
+Run `add_users.js` and `add_events.js` to add some sample data to the existing tables.
 
 ## Server Setup
 Run `server.js` to create an instance of the server on the 8081 port of your localhost machine to listen to incoming requests.
