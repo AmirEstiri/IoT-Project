@@ -36,7 +36,11 @@ function checkAuth(req, res, next) {
 	}
 }
 
-app.get('/auth/:username/:pwdHashed', function(req, res){
+app.get('/api/test', function(req, res){
+	console.log("Testing");
+});
+
+app.get('/api/auth/:username/:pwdHashed', function(req, res){
 	username = req.params['username'];
 	pwdHashed = req.params['pwdHashed'];
 	pwdHashed = passwordHash.generate('Estiri');
@@ -53,13 +57,13 @@ app.get('/auth/:username/:pwdHashed', function(req, res){
 	});
 });
 
-app.get('/logout', function (req, res) {
+app.get('/api/logout', function (req, res) {
 	user = req.session.user_id
 	delete req.session.user_id;
 	res.end(`${user} logout`);
 });
 
-app.get('/events', checkAuth, function (req, res) {
+app.get('/api/events', checkAuth, function (req, res) {
 	var sql = "SELECT * FROM events";
 	con.query(sql, function (err, result) {
 		if (err) throw err;
@@ -67,7 +71,7 @@ app.get('/events', checkAuth, function (req, res) {
 	});
 });
 
-app.get('/addEvent/:time/:lid/:action', checkAuth, function (req, res) {
+app.get('/api/addEvent/:time/:lid/:action', checkAuth, function (req, res) {
 	time = req.params['time']
 	lid = req.params['lid']
 	action = req.params['action']
@@ -78,7 +82,7 @@ app.get('/addEvent/:time/:lid/:action', checkAuth, function (req, res) {
 	});
 });
 
-app.get('/addBacklog/:time/:lid/:action', checkAuth, function (req, res) {
+app.get('/api/addBacklog/:time/:lid/:action', checkAuth, function (req, res) {
 	time = req.params['time']
 	lid = req.params['lid']
 	action = req.params['action']
@@ -89,7 +93,7 @@ app.get('/addBacklog/:time/:lid/:action', checkAuth, function (req, res) {
 	});
 });
 
-app.get('/listBacklogs/:time', checkAuth, function (req, res) {
+app.get('/api/listBacklogs/:time', checkAuth, function (req, res) {
 	time = req.params['time']
 	var sql = `SELECT * FROM backlogs WHERE time = ${time}`;
 	con.query(sql, function (err, result) {
@@ -98,7 +102,7 @@ app.get('/listBacklogs/:time', checkAuth, function (req, res) {
 	});
 });
 
-app.get('/deleteBacklog/:time', checkAuth, function (req, res) {
+app.get('/api/deleteBacklog/:time', checkAuth, function (req, res) {
 	time = req.params['time']
 	var sql = `DELETE FROM backlogs WHERE time = ${time}`;
 	con.query(sql, function (err, result) {
