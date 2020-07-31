@@ -163,11 +163,11 @@ class Lamp {
     }
 
     turnOff() {
-        this.state = false;
+        this.State = false;
     }
 
     toggle() {
-        if (this.state) {
+        if (this.State) {
             this.turnOff();
         } else {
             this.turnOn();
@@ -404,10 +404,10 @@ app.get('/api/login/:username/:pwdHashed', function(req, res){
 	  if (err) throw err;
 	  if (passwordHash.verify(result[0]['password'], pwdHashed)) {
 		req.session.user_id = username;
-		res.end({"message": 'Login successfull'});
+		res.send({"message": 'Login successfull'});
 	} 
 	else {
-		res.end({"message": "Login failed"});
+		res.send({"message": "Login failed"});
 	}
 	});
 });
@@ -415,16 +415,21 @@ app.get('/api/login/:username/:pwdHashed', function(req, res){
 app.get('/api/logout', function (req, res) {
 	user = req.session.user_id
 	delete req.session.user_id;
-	res.end({"message": `${user} logout`});
+	res.send({"message": `${user} logout`});
 });
 
-app.get('/api/getEnergySaved', checkAuth, function (req, res) {
-	res.end({"message": city.getCostValue()});
+app.get('/api/getCostAdmin', checkAuth, function (req, res) {
+	res.send({"message": city.getCostValue().toString()});
 });
 
-app.get('/api/changeLampState/:lid', checkAuth, function(req, res) {
+app.get('/api/changeLampStateAdmin/:lid', checkAuth, function(req, res) {
     var lid = req.params['lid'];
     city.toggle(lid);
+    if (city.getStates[lid-1]){
+        res.send({"message": "ON"})
+    } else {
+        res.send({"message": "OFF"})
+    }
 });
 
 app.get('/api/triggerSensor/:lid/:time', checkAuth, function(req, res) {
@@ -432,7 +437,7 @@ app.get('/api/triggerSensor/:lid/:time', checkAuth, function(req, res) {
     var time = req.params['time'];
     console.log(time);
     city.update(lid, toSecond(time), V0);
-	res.end("Successful");
+	res.send("Successful");
 });
 
 app.get('/api/getLampState/:lid', checkAuth, function(req, res) {

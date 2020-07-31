@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     String URL_BASE = "http://192.168.1.105:8081";
-    private String state[] = new String[4];
+    private String[] state = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        final Button btn[] = new Button[4];
+        final ImageButton[] btn = new ImageButton[4];
         btn[0] = findViewById(R.id.button);
         btn[1] = findViewById(R.id.button2);
         btn[2] = findViewById(R.id.button3);
         btn[3] = findViewById(R.id.button4);
+
+        final TextView textViewCost = findViewById(R.id.text_view_result);
 
         final iotAPI iotapi = retrofit.create(iotAPI.class);
 
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                                 Call<Message> call1 = iotapi.getLampStateAdmin(1);
                                 call1.enqueue(new Callback<Message>() {
                                     @Override
-                                    public void onResponse(Call<Message> call1, Response<Message> response) {
+                                    public void onResponse(Call<Message> call, Response<Message> response) {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Message> call1, Throwable t) {
+                                    public void onFailure(Call<Message> call, Throwable t) {
                                         Log.d("FAILURE", t.getMessage());
                                     }
                                 });
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                 Call<Message> call2 = iotapi.getLampStateAdmin(2);
                                 call2.enqueue(new Callback<Message>() {
                                     @Override
-                                    public void onResponse(Call<Message> call2, Response<Message> response) {
+                                    public void onResponse(Call<Message> call, Response<Message> response) {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Message> call2, Throwable t) {
+                                    public void onFailure(Call<Message> call, Throwable t) {
                                         Log.d("FAILURE", t.getMessage());
                                     }
                                 });
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                                 Call<Message> call3 = iotapi.getLampStateAdmin(3);
                                 call3.enqueue(new Callback<Message>() {
                                     @Override
-                                    public void onResponse(Call<Message> call3, Response<Message> response) {
+                                    public void onResponse(Call<Message> call, Response<Message> response) {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Message> call3, Throwable t) {
+                                    public void onFailure(Call<Message> call, Throwable t) {
                                         Log.d("FAILURE", t.getMessage());
                                     }
                                 });
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                 Call<Message> call4 = iotapi.getLampStateAdmin(4);
                                 call4.enqueue(new Callback<Message>() {
                                     @Override
-                                    public void onResponse(Call<Message> call4, Response<Message> response) {
+                                    public void onResponse(Call<Message> call, Response<Message> response) {
                                         if (!response.isSuccessful()) {
                                             return;
                                         }
@@ -132,9 +135,27 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d("FAILURE", t.getMessage());
                                     }
                                 });
+
+                                Call<Message> callCost = iotapi.getCostAdmin();
+                                callCost.enqueue(new Callback<Message>() {
+                                    @Override
+                                    public void onResponse(Call<Message> call, Response<Message> response) {
+                                        if (!response.isSuccessful()){
+                                            return;
+                                        }
+                                        Message msg = response.body();
+                                        String cost = msg.getMessage();
+                                        textViewCost.setText(cost);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Message> call, Throwable t) {
+                                        Log.d("FAILURE", t.getMessage());
+                                    }
+                                });
                             }
                         });
-                        Thread.sleep(10000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                     }
                 }

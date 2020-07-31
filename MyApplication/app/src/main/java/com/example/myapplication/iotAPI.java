@@ -13,4 +13,7 @@ public interface iotAPI {
     @GET("api/getLampStateAdmin/{lid}")
     Call<Message> getLampStateAdmin(@Path("lid") int lid);
 
+    @GET("api/getCostAdmin")
+    Call<Message> getCostAdmin();
+
 }
