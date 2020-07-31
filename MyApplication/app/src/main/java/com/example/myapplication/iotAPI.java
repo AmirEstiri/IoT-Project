@@ -7,10 +7,10 @@ import retrofit2.http.Path;
 
 public interface iotAPI {
 
-    @GET("api/changeLampState/{lid}")
-    Call<Message> changeLampState(@Path("lid") int lid);
+    @GET("api/changeLampStateAdmin/{lid}")
+    Call<Message> changeLampStateAdmin(@Path("lid") int lid);
 
-    @GET("api/getLampState/{lid}")
-    Call<Message> getLampState(@Path("lid") int lid);
+    @GET("api/getLampStateAdmin/{lid}")
+    Call<Message> getLampStateAdmin(@Path("lid") int lid);
 
 }

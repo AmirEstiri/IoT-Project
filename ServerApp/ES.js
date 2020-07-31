@@ -1,8 +1,5 @@
 
 // Add libraries
-const http = require('http');
-const hostname = '127.0.0.1';
-const port = 3000;
 var express = require('express');
 var app = express();
 var fs = require("fs");
@@ -18,12 +15,12 @@ var con = mysql.createConnection({
 	password: "nodejsiot",
 	database: "iotdb"
 });
-
 con.connect(function(err) {
 	if (err) throw err;
 	console.log("Connected!");
 })
 
+// Activate sessions for log in/log out
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -32,7 +29,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-// Authorization checking for users
+// Authorization for admins
 function checkAuth(req, res, next) {
 	if (!req.session.user_id) {
 		// res.send(401, 'You are not authorized to view this page');
@@ -47,7 +44,6 @@ function checkAuth(req, res, next) {
 // Time variables.
 
 var time = 0;
-var date = new Date();
 
 
 // Convert times.
@@ -151,7 +147,8 @@ class Lamp {
         if (time >= this.end && this.State) {
 
             for (let i = 0; i < this.waitingArray.length; i++) {
-                if (this.waitingArray[i] >= time && this.Cost.getCostPerTurnOn() >= (x - time) * this.Cost.getCostPerSecond()){
+                let x = this.waitingArray[i];
+                if (x >= time && this.Cost.getCostPerTurnOn() >= (x - time) * this.Cost.getCostPerSecond()){
                     return;
                 }
             }
@@ -167,6 +164,14 @@ class Lamp {
 
     turnOff() {
         this.state = false;
+    }
+
+    toggle() {
+        if (this.state) {
+            this.turnOff();
+        } else {
+            this.turnOn();
+        }
     }
 
     resetCost() {
@@ -249,6 +254,15 @@ class City {
         }
     }
 
+    toggle(ID) {
+        for (let i = 0; i < this.Lamps.length; i++) {
+            if (this.Lamps[i].getID() === ID) {
+                this.Lamps[i].toggle();
+                break;
+            }
+        }
+    }
+
     computeCost() {
         this.CostValue = 0;
         for (let i = 0; i < this.Lamps.length; i++) {
@@ -305,24 +319,26 @@ city.addDistance(20);
 city.addDistance(20);
 city.setCost(cost);
 
-const V0 = 20;
+const V0 = 2;
 
 
 // Main Loop.
 
 every = 1000;
 setInterval(function(){
-    main();
+    updateSystem();
 }, every);
 
-function main() {
+function updateSystem() {
 
     // Time.
 
-    date.getDate();
-    let timeString = date.toISOString().substr(11, 8);
-    time = toSecond(timeString);
-    console.log(timeString);
+    //TODO: change time format to 24h
+    var timeString = new Date().toLocaleTimeString().substr(0, 8);
+    // date.getDate();
+    // let timeString = date.toISOString().substr(11, 8);
+    time = toSecond(timeString) + 12 * 3600;
+    // console.log(date);
 
 
     // Main actions!
@@ -379,15 +395,6 @@ function main() {
 }
 
 
-// Shabnam (s):
-// var strings = s.split("/");
-//
-// t = toSecond(strings[2]);
-// ID = parseInt(strings[3]);
-// v = Math.random() * V0;
-//
-// city.update(ID, t, v);
-
 app.get('/api/login/:username/:pwdHashed', function(req, res){
 	username = req.params['username'];
 	pwdHashed = req.params['pwdHashed'];
@@ -412,14 +419,34 @@ app.get('/api/logout', function (req, res) {
 });
 
 app.get('/api/getEnergySaved', checkAuth, function (req, res) {
-	res.send({"message": city.getCostValue()});
+	res.end({"message": city.getCostValue()});
 });
 
 app.get('/api/changeLampState/:lid', checkAuth, function(req, res) {
-	// TODO: change state of lamp[lid-1]
+    var lid = req.params['lid'];
+    city.toggle(lid);
+});
+
+app.get('/api/triggerSensor/:lid/:time', checkAuth, function(req, res) {
+	var lid = req.params['lid'];
+    var time = req.params['time'];
+    console.log(time);
+    city.update(lid, toSecond(time), V0);
+	res.end("Successful");
 });
 
 app.get('/api/getLampState/:lid', checkAuth, function(req, res) {
+    var lid = req.params['lid'];
+    states = city.getStates();
+    console.log(`lid: ${lid}, states: ${states}`);
+    if (states[lid-1]){
+        res.send("ON");
+    } else {
+        res.send("OFF");
+    }
+});
+
+app.get('/api/getLampStateAdmin/:lid', checkAuth, function(req, res) {
     var lid = req.params['lid'];
     states = city.getStates();
     if (states[lid-1]){

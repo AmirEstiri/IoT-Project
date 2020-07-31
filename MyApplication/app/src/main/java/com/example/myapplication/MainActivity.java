@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Call<Message> call1 = iotapi.getLampState(1);
+                                Call<Message> call1 = iotapi.getLampStateAdmin(1);
                                 call1.enqueue(new Callback<Message>() {
                                     @Override
                                     public void onResponse(Call<Message> call1, Response<Message> response) {
@@ -55,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
                                         Message msg = response.body();
                                         state[0] = msg.getMessage();
                                         if (state[0].equals("ON")) {
-                                            btn[0].setBackgroundResource(R.color.colorLightON);
+                                            btn[0].setBackgroundResource(R.drawable.lighton);
                                         } else {
-                                            btn[0].setBackgroundResource(R.color.colorLightOFF);
+                                            btn[0].setBackgroundResource(R.drawable.lightoff);
                                         }
                                     }
 
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Call<Message> call2 = iotapi.getLampState(2);
+                                Call<Message> call2 = iotapi.getLampStateAdmin(2);
                                 call2.enqueue(new Callback<Message>() {
                                     @Override
                                     public void onResponse(Call<Message> call2, Response<Message> response) {
@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
                                         Message msg = response.body();
                                         state[1] = msg.getMessage();
                                         if (state[1].equals("ON")) {
-                                            btn[1].setBackgroundResource(R.color.colorLightON);
+                                            btn[1].setBackgroundResource(R.drawable.lighton);
                                         } else {
-                                            btn[1].setBackgroundResource(R.color.colorLightOFF);
+                                            btn[1].setBackgroundResource(R.drawable.lightoff);
                                         }
                                     }
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Call<Message> call3 = iotapi.getLampState(3);
+                                Call<Message> call3 = iotapi.getLampStateAdmin(3);
                                 call3.enqueue(new Callback<Message>() {
                                     @Override
                                     public void onResponse(Call<Message> call3, Response<Message> response) {
@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
                                         Message msg = response.body();
                                         state[2] = msg.getMessage();
                                         if (state[2].equals("ON")) {
-                                            btn[2].setBackgroundResource(R.color.colorLightON);
+                                            btn[2].setBackgroundResource(R.drawable.lighton);
                                         } else {
-                                            btn[2].setBackgroundResource(R.color.colorLightOFF);
+                                            btn[2].setBackgroundResource(R.drawable.lightoff);
                                         }
                                     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                Call<Message> call4 = iotapi.getLampState(4);
+                                Call<Message> call4 = iotapi.getLampStateAdmin(4);
                                 call4.enqueue(new Callback<Message>() {
                                     @Override
                                     public void onResponse(Call<Message> call4, Response<Message> response) {
@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
                                         Message msg = response.body();
                                         state[3] = msg.getMessage();
                                         if (state[3].equals("ON")) {
-                                            btn[3].setBackgroundResource(R.color.colorLightON);
+                                            btn[3].setBackgroundResource(R.drawable.lighton);
                                         } else {
-                                            btn[3].setBackgroundResource(R.color.colorLightOFF);
+                                            btn[3].setBackgroundResource(R.drawable.lightoff);
                                         }
                                     }
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         btnClick[0] = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(1);
+                Call<Message> call = iotapi.changeLampStateAdmin(1);
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
@@ -156,9 +156,9 @@ public class MainActivity extends AppCompatActivity {
                         Message msg = response.body();
                         state[0] = msg.getMessage();
                         if (state[0].equals("ON")) {
-                            btn[0].setBackgroundResource(R.color.colorLightON);
+                            btn[0].setBackgroundResource(R.drawable.lighton);
                         } else {
-                            btn[0].setBackgroundResource(R.color.colorLightOFF);
+                            btn[0].setBackgroundResource(R.drawable.lightoff);
                         }
                     }
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         btnClick[1] = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(2);
+                Call<Message> call = iotapi.changeLampStateAdmin(2);
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
@@ -183,9 +183,9 @@ public class MainActivity extends AppCompatActivity {
                         Message msg = response.body();
                         state[1] = msg.getMessage();
                         if (state[1].equals("ON")) {
-                            btn[1].setBackgroundResource(R.color.colorLightON);
+                            btn[1].setBackgroundResource(R.drawable.lighton);
                         } else {
-                            btn[1].setBackgroundResource(R.color.colorLightOFF);
+                            btn[1].setBackgroundResource(R.drawable.lightoff);
                         }
                     }
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         btnClick[2] = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(3);
+                Call<Message> call = iotapi.changeLampStateAdmin(3);
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
@@ -210,9 +210,9 @@ public class MainActivity extends AppCompatActivity {
                         Message msg = response.body();
                         state[2] = msg.getMessage();
                         if (state[2].equals("ON")) {
-                            btn[2].setBackgroundResource(R.color.colorLightON);
+                            btn[2].setBackgroundResource(R.drawable.lighton);
                         } else {
-                            btn[2].setBackgroundResource(R.color.colorLightOFF);
+                            btn[2].setBackgroundResource(R.drawable.lightoff);
                         }
                     }
 
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         btnClick[3] = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(4);
+                Call<Message> call = iotapi.changeLampStateAdmin(4);
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
@@ -237,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
                         Message msg = response.body();
                         state[3] = msg.getMessage();
                         if (state[3].equals("ON")) {
-                            btn[3].setBackgroundResource(R.color.colorLightON);
+                            btn[3].setBackgroundResource(R.drawable.lighton);
                         } else {
-                            btn[3].setBackgroundResource(R.color.colorLightOFF);
+                            btn[3].setBackgroundResource(R.drawable.lightoff);
                         }
                     }
 
