@@ -16,9 +16,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textViewResult;
     String URL_BASE = "http://192.168.1.105:8081";
-    private String state[] = new String[6];
+    private String state[] = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +28,11 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        final Button btn[] = new Button[6];
+        final Button btn[] = new Button[4];
         btn[0] = findViewById(R.id.button);
         btn[1] = findViewById(R.id.button2);
         btn[2] = findViewById(R.id.button3);
         btn[3] = findViewById(R.id.button4);
-        btn[4] = findViewById(R.id.button5);
-        btn[5] = findViewById(R.id.button6);
 
         final iotAPI iotapi = retrofit.create(iotAPI.class);
 
@@ -97,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Message> call3, Response<Message> response) {
                                         if (!response.isSuccessful()) {
-                                            textViewResult.setText("Code: " + response.code());
                                             return;
                                         }
                                         Message msg = response.body();
@@ -120,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Message> call4, Response<Message> response) {
                                         if (!response.isSuccessful()) {
-                                            textViewResult.setText("Code: " + response.code());
                                             return;
                                         }
                                         Message msg = response.body();
@@ -137,52 +132,6 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d("FAILURE", t.getMessage());
                                     }
                                 });
-
-                                Call<Message> call5 = iotapi.getLampState(5);
-                                call5.enqueue(new Callback<Message>() {
-                                    @Override
-                                    public void onResponse(Call<Message> call5, Response<Message> response) {
-                                        if (!response.isSuccessful()) {
-                                            textViewResult.setText("Code: " + response.code());
-                                            return;
-                                        }
-                                        Message msg = response.body();
-                                        state[4] = msg.getMessage();
-                                        if (state[4].equals("ON")) {
-                                            btn[4].setBackgroundResource(R.color.colorLightON);
-                                        } else {
-                                            btn[4].setBackgroundResource(R.color.colorLightOFF);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Message> call5, Throwable t) {
-                                        Log.d("FAILURE", t.getMessage());
-                                    }
-                                });
-
-                                Call<Message> call6 = iotapi.getLampState(6);
-                                call6.enqueue(new Callback<Message>() {
-                                    @Override
-                                    public void onResponse(Call<Message> call6, Response<Message> response) {
-                                        if (!response.isSuccessful()) {
-                                            textViewResult.setText("Code: " + response.code());
-                                            return;
-                                        }
-                                        Message msg = response.body();
-                                        state[5] = msg.getMessage();
-                                        if (state[5].equals("ON")) {
-                                            btn[5].setBackgroundResource(R.color.colorLightON);
-                                        } else {
-                                            btn[5].setBackgroundResource(R.color.colorLightOFF);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Message> call6, Throwable t) {
-                                        Log.d("FAILURE", t.getMessage());
-                                    }
-                                });
                             }
                         });
                         Thread.sleep(10000);
@@ -193,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         };
         thread.start();
 
-        View.OnClickListener btnClick[] = new View.OnClickListener[6];
+        View.OnClickListener btnClick[] = new View.OnClickListener[4];
         btnClick[0] = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
                         if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
                             return;
                         }
                         Message msg = response.body();
@@ -229,9 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-
                         if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
                             return;
                         }
                         Message msg = response.body();
@@ -258,9 +204,7 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-
                         if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
                             return;
                         }
                         Message msg = response.body();
@@ -287,9 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-
                         if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
                             return;
                         }
                         Message msg = response.body();
@@ -309,70 +251,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        btnClick[4] = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(5);
-                call.enqueue(new Callback<Message>() {
-                    @Override
-                    public void onResponse(Call<Message> call, Response<Message> response) {
-
-                        if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
-                            return;
-                        }
-                        Message msg = response.body();
-                        state[4] = msg.getMessage();
-                        if (state[4].equals("ON")) {
-                            btn[4].setBackgroundResource(R.color.colorLightON);
-                        } else {
-                            btn[4].setBackgroundResource(R.color.colorLightOFF);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Message> call, Throwable t) {
-                        Log.d("FAILURE", t.getMessage());
-                    }
-                });
-            }
-        };
-
-        btnClick[5] = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Call<Message> call = iotapi.changeLampState(6);
-                call.enqueue(new Callback<Message>() {
-                    @Override
-                    public void onResponse(Call<Message> call, Response<Message> response) {
-
-                        if (!response.isSuccessful()) {
-                            textViewResult.setText("Code: " + response.code());
-                            return;
-                        }
-                        Message msg = response.body();
-                        state[5] = msg.getMessage();
-                        if (state[5].equals("ON")) {
-                            btn[5].setBackgroundResource(R.color.colorLightON);
-                        } else {
-                            btn[5].setBackgroundResource(R.color.colorLightOFF);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Message> call, Throwable t) {
-                        Log.d("FAILURE", t.getMessage());
-                    }
-                });
-            }
-        };
-
         btn[0].setOnClickListener(btnClick[0]);
         btn[1].setOnClickListener(btnClick[1]);
         btn[2].setOnClickListener(btnClick[2]);
         btn[3].setOnClickListener(btnClick[3]);
-        btn[4].setOnClickListener(btnClick[4]);
-        btn[5].setOnClickListener(btnClick[5]);
     }
 
 }
