@@ -158,8 +158,9 @@ class Lamp {
     }
 
     turnOn() {
-        this.CostValue += this.Cost.getCostPerTurnOn();
-        this.State = true;
+        // this.CostValue += this.Cost.getCostPerTurnOn();
+        // this.State = true;
+        this.update(time, 5);
     }
 
     turnOff() {
@@ -301,7 +302,7 @@ class City {
 
 // Initialization:
 
-cost = new Cost(1, 100);
+cost = new Cost(1, 10000);
 
 const n = 4;
 lamp1 = new Lamp("1", 15, 10, 5);
@@ -319,7 +320,7 @@ city.addDistance(20);
 city.addDistance(20);
 city.setCost(cost);
 
-const V0 = 2;
+const V0 = 1;
 
 
 // Main Loop.
@@ -332,7 +333,7 @@ setInterval(function(){
 function updateSystem() {
 
     // Time.
-
+    console.log(`states: ${city.getStates()}`);
     //TODO: change time format to 24h
     var timeString = new Date().toLocaleTimeString().substr(0, 8);
     // date.getDate();
@@ -432,18 +433,17 @@ app.get('/api/changeLampStateAdmin/:lid', checkAuth, function(req, res) {
     }
 });
 
-app.get('/api/triggerSensor/:lid/:time', checkAuth, function(req, res) {
+app.get('/api/triggerSensor/:lid/', checkAuth, function(req, res) {
 	var lid = req.params['lid'];
-    var time = req.params['time'];
-    console.log(time);
-    city.update(lid, toSecond(time), V0);
+    console.log(`lid: ${lid}, V0: ${V0}`);
+    city.update(lid, time, V0);
 	res.send("Successful");
 });
 
 app.get('/api/getLampState/:lid', checkAuth, function(req, res) {
     var lid = req.params['lid'];
     states = city.getStates();
-    console.log(`lid: ${lid}, states: ${states}`);
+    // console.log(`lid: ${lid}, states: ${states}`);
     if (states[lid-1]){
         res.send("ON");
     } else {
